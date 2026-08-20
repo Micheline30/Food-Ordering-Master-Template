@@ -587,8 +587,7 @@ nav{
   font-size:.7rem;color:rgba(255,255,255,.5);
   text-transform:uppercase;letter-spacing:.1em;margin-top:.1rem;
 }
-
-/* ---- info strip ---- */
+   /* ---- info strip ---- */
 .dstrip{background:linear-gradient(90deg,var(--plum),#4a1a63,var(--plum));padding:14px 5%;display:flex;align-items:center;justify-content:center;gap:1.6rem;flex-wrap:wrap;text-align:center;}
 .dstrip-item{font-size:.83rem;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:.4rem;}
 .dstrip-item strong{color:var(--gold2);}
@@ -750,7 +749,6 @@ footer a{color:rgba(255,255,255,.4);text-decoration:none;}
 
 body{padding-bottom:0;}
 </style>
-
 </head>
 <body>
 <!-- MASTER TEMPLATE: new-client setup is controlled by the CLIENT object near the top of the main script. -->
@@ -1077,11 +1075,6564 @@ body{padding-bottom:0;}
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
-<script>
+   <script>
 (function(){
 "use strict";
 
-/* MASTER CLIENT CONFIGURATION */
-   window.downloadMenuQR =
+/* ================================================================
+   MASTER CLIENT CONFIGURATION
+   For a new business, normally edit ONLY this object.
+
+   IMPORTANT:
+   NEVER put Square access tokens, API secrets, or admin passwords here.
+   Those stay inside the client's Cloudflare Worker environment.
+   ================================================================ */
+
+var CLIENT = {
+
+  /* ------------------------------------------------
+     BASIC BUSINESS IDENTITY
+     ------------------------------------------------ */
+
+  key: "royal-sweets",
+
+  businessName: "Royal Sweets Boutique",
+
+  shortName: "Royal Sweets",
+
+  brandSubName: "Boutique",
+
+  businessType: "Food Truck",
+
+  icon: "👑",
+
+  tagline: "Fit for a King.",
+
+  heroBadge: "🚚 Food Truck · Custom Cakes & Sweets",
+
+  heroText:
+    "Handcrafted cheesecakes, custom cakes & hand-spun milkshakes — made fresh and served with a crown on top.",
+
+  menuNote: "Live menu powered by Square",
+
+
+  /* ------------------------------------------------
+     CUSTOMER-FACING CONTENT
+     ------------------------------------------------ */
+
+  content: {
+
+    showcaseLabel: "What We're Known For",
+
+    showcaseTitle: "Sweet Royalty",
+
+    showcase: [
+      {
+        icon: "🍰",
+        label: "Cheesecakes"
+      },
+      {
+        icon: "🎂",
+        label: "Custom Cakes"
+      },
+      {
+        icon: "🥤",
+        label: "Milkshakes"
+      }
+    ],
+
+    aboutTitle: "Baked With Love",
+
+    aboutText1:
+      "Royal Sweets Boutique started with a simple idea: dessert should feel like an occasion.",
+
+    aboutText2:
+      "No shortcuts. No boxed mixes. Just real ingredients, real craft, and a little bit of sparkle.",
+
+    aboutPills: [
+      "🍰 Made From Scratch",
+      "🎂 Custom Cake Orders",
+      "🥤 Hand-Spun Shakes",
+      "🚚 Food Truck"
+    ],
+
+    fulfillmentLabel: "Book The Truck",
+
+    fulfillmentTitle: "Bring the Crown to You",
+
+    fulfillmentIntro:
+      "Choose pickup or delivery when ordering. Delivery availability and fees are based on order quantity and distance."
+
+  },
+
+
+  /* ------------------------------------------------
+     CONTACT INFORMATION
+     ------------------------------------------------ */
+
+  contact: {
+
+    phone: "843-472-9361",
+
+    email: "royalsweetsboutiquellc@gmail.com",
+
+    mailingAddress:
+      "P.O. Box 737, Timmonsville, SC 29161"
+
+  },
+
+
+  /* ------------------------------------------------
+     PICKUP + DELIVERY RULES
+     ------------------------------------------------ */
+
+  fulfillment: {
+
+    pickupLocation:
+      "200 Sanborn St, Florence, SC 29501",
+
+    pickupNote:
+      "or a predetermined location",
+
+    deliveryRules:
+      "5 or more orders receive FREE delivery within 10 miles. Less than 5 orders: $10 flat fee within 10 miles. Beyond 15 miles, the delivery fee is calculated by mileage.",
+
+    defaultFulfillment: "pickup",
+
+    defaultDeliveryFee: 0
+
+  },
+
+
+  /* ------------------------------------------------
+     PAYMENT DISPLAY
+     ------------------------------------------------ */
+
+  payments: {
+
+    displayText:
+      "Square, Apple Pay, or Cash",
+
+    policyText:
+      "No cash accepted on deliveries.",
+
+    squareEnabled: true
+
+  },
+
+
+  /* ------------------------------------------------
+     CLIENT URLS
+
+     Each new client receives their own versions.
+     ------------------------------------------------ */
+
+  urls: {
+
+    site:
+      "https://royalsweets.github.io/RoyalSweetsBoutique/",
+
+    backend:
+      "https://royal-sweets-backend.joessweetsgithub.workers.dev",
+
+    squareCatalog:
+      "https://royal-sweets-square.joessweetsgithub.workers.dev/"
+
+  },
+
+
+  /* ------------------------------------------------
+     BRAND COLORS
+     ------------------------------------------------ */
+
+  colors: {
+
+    primary: "#0B2F87",
+
+    primary2: "#14409e",
+
+    primaryDeep: "#071c56",
+
+    accent: "#C9A227",
+
+    accent2: "#E8C766",
+
+    highlight: "#EC5FA8",
+
+    highlightSoft: "#FBD9EA",
+
+    dark: "#3B1450",
+
+    background: "#FFF8EC",
+
+    background2: "#FFFDF7",
+
+    text: "#241338",
+
+    muted: "#7a7284",
+
+    border: "#EFE3CE",
+
+    success: "#1a7a40"
+
+  },
+
+
+  /* ------------------------------------------------
+     OPTIONAL BUSINESS LOGO
+
+     Leave blank to use the icon above.
+
+     Later you can place a hosted image URL here:
+
+     logoUrl: "https://example.com/logo.png"
+     ------------------------------------------------ */
+
+  logoUrl: "",
+
+
+  /* ------------------------------------------------
+     FALLBACK MENU
+
+     This menu appears if Square is unavailable.
+
+     When Square successfully connects, the Square
+     catalog replaces this menu automatically.
+     ------------------------------------------------ */
+
+  fallbackMenu: [
+
+    {
+      key: "cakes",
+
+      label: "Custom Cakes",
+
+      items: [
+
+        {
+          id: "c1",
+
+          name: "Royal Vanilla Bean Cake",
+
+          price: 35,
+
+          desc:
+            "Sample item — classic vanilla layers, buttercream."
+        },
+
+        {
+          id: "c2",
+
+          name: "Chocolate Crown Cake",
+
+          price: 38,
+
+          desc:
+            "Sample item — rich chocolate, ganache drip."
+        },
+
+        {
+          id: "c3",
+
+          name: "Custom Design Cake",
+
+          price: 0,
+
+          desc:
+            "Sample item — priced per design, replace with real pricing."
+        }
+
+      ]
+
+    },
+
+
+    {
+      key: "cheesecakes",
+
+      label: "Cheesecakes",
+
+      items: [
+
+        {
+          id: "cc1",
+
+          name: "Classic New York Cheesecake",
+
+          price: 28,
+
+          desc:
+            "Sample item — whole cheesecake, graham crust."
+        },
+
+        {
+          id: "cc2",
+
+          name: "Strawberry Swirl Cheesecake",
+
+          price: 30,
+
+          desc:
+            "Sample item — fresh strawberry swirl."
+        },
+
+        {
+          id: "cc3",
+
+          name: "Mini Cheesecake Cup",
+
+          price: 5,
+
+          desc:
+            "Sample item — single-serve cheesecake cup."
+        }
+
+      ]
+
+    },
+
+
+    {
+      key: "cupcakes",
+
+      label: "Cupcakes",
+
+      items: [
+
+        {
+          id: "cp1",
+
+          name: "Gold Crown Cupcake",
+
+          price: 4,
+
+          desc:
+            "Sample item — vanilla cupcake, gold-dusted buttercream."
+        },
+
+        {
+          id: "cp2",
+
+          name: "Blush Pink Cupcake",
+
+          price: 4,
+
+          desc:
+            "Sample item — strawberry cupcake, pink swirl."
+        },
+
+        {
+          id: "cp3",
+
+          name: "Dozen Assorted Cupcakes",
+
+          price: 42,
+
+          desc:
+            "Sample item — 12 mixed flavor cupcakes."
+        }
+
+      ]
+
+    },
+
+
+    {
+      key: "shakes",
+
+      label: "Milkshakes",
+
+      items: [
+
+        {
+          id: "s1",
+
+          name: "Royal Vanilla Milkshake",
+
+          price: 8,
+
+          desc:
+            "Sample item — hand-spun vanilla shake, whipped cream."
+        },
+
+        {
+          id: "s2",
+
+          name: "Chocolate Crown Shake",
+
+          price: 8,
+
+          desc:
+            "Sample item — rich chocolate shake, gold drizzle."
+        },
+
+        {
+          id: "s3",
+
+          name: "Strawberry Blush Shake",
+
+          price: 8,
+
+          desc:
+            "Sample item — fresh strawberry shake."
+        }
+
+      ]
+
+    }
+
+  ],
+
+
+  /* ------------------------------------------------
+     FEATURED HOME-PAGE ITEMS
+     ------------------------------------------------ */
+
+  featuredIds: [
+    "c1",
+    "cc2",
+    "cp3",
+    "s1"
+  ],
+
+  featuredIcons: [
+    "🎂",
+    "🍰",
+    "🧁",
+    "🥤"
+  ]
+
+};
+
+
+/* ================================================================
+   APP CONNECTIONS
+
+   These are automatically generated from CLIENT above.
+   Normally you DO NOT edit these.
+   ================================================================ */
+
+var BACKEND_URL =
+  CLIENT.urls.backend.replace(/\/$/, "");
+
+var SITE_URL =
+  CLIENT.urls.site.replace(/\/$/, "") + "/";
+
+var SQUARE_CATALOG_URL =
+  CLIENT.urls.squareCatalog;
+
+
+/* ================================================================
+   UNIQUE STORAGE PER CLIENT
+
+   This prevents one client's admin/menu settings
+   from colliding with another client's app.
+   ================================================================ */
+
+var STORAGE_PREFIX =
+  "foodapp_" +
+  CLIENT.key.replace(/[^a-z0-9_-]/gi, "_");
+
+var ADMIN_STORAGE_KEY =
+  STORAGE_PREFIX + "_admin";
+
+var OVERRIDE_STORAGE_KEY =
+  STORAGE_PREFIX + "_overrides";
+
+
+/* ================================================================
+   STARTING MENU
+   ================================================================ */
+
+var MENU =
+  JSON.parse(
+    JSON.stringify(
+      CLIENT.fallbackMenu || []
+    )
+  );
+
+var FEATURED_IDS =
+  CLIENT.featuredIds.slice();
+
+
+/* ================================================================
+   APPLICATION STATE
+   ================================================================ */
+
+var cart = [];
+
+var menuBuilt = false;
+
+var toastTimer = null;
+
+var squareSyncInfo = {
+
+  itemCount: 0,
+
+  categoryCount: 0,
+
+  lastSync: null,
+
+  error: null
+
+};
+
+var adminKey =
+  sessionStorage.getItem(
+    ADMIN_STORAGE_KEY
+  ) || "";
+
+var adminOrdersCache = [];
+
+
+/* ================================================================
+   CLIENT BRANDING
+   ================================================================ */
+
+function setText(id, value){
+
+  var el =
+    document.getElementById(id);
+
+  if(el){
+
+    el.textContent =
+      value == null
+        ? ""
+        : String(value);
+
+  }
+
+}
+
+function applyClientConfig(){
+
+  var c =
+    CLIENT.colors || {};
+
+  var root =
+    document.documentElement;
+
+
+  /* ---- APPLY COLORS ---- */
+
+  var cssMap = {
+
+    "--blue":
+      c.primary,
+
+    "--blue2":
+      c.primary2,
+
+    "--blue-deep":
+      c.primaryDeep,
+
+    "--gold":
+      c.accent,
+
+    "--gold2":
+      c.accent2,
+
+    "--pink":
+      c.highlight,
+
+    "--pink-soft":
+      c.highlightSoft,
+
+    "--plum":
+      c.dark,
+
+    "--cream":
+      c.background,
+
+    "--cream2":
+      c.background2,
+
+    "--ink":
+      c.text,
+
+    "--gray":
+      c.muted,
+
+    "--border":
+      c.border,
+
+    "--green":
+      c.success
+
+  };
+
+
+  Object.keys(cssMap)
+    .forEach(function(k){
+
+      if(cssMap[k]){
+
+        root.style
+          .setProperty(
+            k,
+            cssMap[k]
+          );
+
+      }
+
+    });
+
+
+  /* ---- PAGE TITLE ---- */
+
+  document.title =
+    CLIENT.businessName +
+    " | " +
+    CLIENT.businessType;
+
+
+  /* ---- NAVIGATION ---- */
+
+  setText(
+    "navBrandName",
+    CLIENT.shortName
+  );
+
+  setText(
+    "navBrandSub",
+    CLIENT.brandSubName ||
+    CLIENT.businessType
+  );
+
+
+  /* ---- HERO ---- */
+
+  setText(
+    "brandIconHero",
+    CLIENT.icon || "🍽️"
+  );
+
+  setText(
+    "heroBadge",
+    CLIENT.heroBadge
+  );
+
+  setText(
+    "heroHeadline",
+    CLIENT.tagline
+  );
+
+  setText(
+    "heroBrandName",
+    CLIENT.shortName
+  );
+
+  setText(
+    "heroSub",
+    CLIENT.heroText
+  );
+
+
+  /* ---- FOOTER / ADMIN ---- */
+
+  setText(
+    "footerBrand",
+    CLIENT.businessName
+  );
+
+  setText(
+    "adminDashboardTitle",
+    CLIENT.shortName +
+    " — Dashboard"
+  );
+
+  setText(
+    "adminLoginSubtitle",
+    CLIENT.shortName +
+    " Dashboard"
+  );
+
+  setText(
+    "menuNote",
+    CLIENT.menuNote ||
+    "Live menu powered by Square"
+  );
+
+
+  /* ---- HOME CONTENT ---- */
+
+  var ct =
+    CLIENT.content || {};
+
+
+  setText(
+    "showcaseLabel",
+    ct.showcaseLabel ||
+    "Featured"
+  );
+
+  setText(
+    "showcaseTitle",
+    ct.showcaseTitle ||
+    "Customer Favorites"
+  );
+
+  setText(
+    "aboutTitle",
+    ct.aboutTitle ||
+    "Our Story"
+  );
+
+  setText(
+    "aboutText1",
+    ct.aboutText1 || ""
+  );
+
+  setText(
+    "aboutText2",
+    ct.aboutText2 || ""
+  );
+
+  setText(
+    "aboutIcon",
+    CLIENT.icon || "🍽️"
+  );
+
+  setText(
+    "fulfillmentLabel",
+    ct.fulfillmentLabel ||
+    "Order Information"
+  );
+
+  setText(
+    "fulfillmentTitle",
+    ct.fulfillmentTitle ||
+    "Order Your Way"
+  );
+
+  setText(
+    "fulfillmentIntro",
+    ct.fulfillmentIntro ||
+    CLIENT.fulfillment.deliveryRules ||
+    ""
+  );
+
+
+  /* ---- SHOWCASE BOXES ---- */
+
+  var sg =
+    document.getElementById(
+      "showcaseGrid"
+    );
+
+  if(sg){
+
+    sg.innerHTML =
+      (ct.showcase || [])
+      .map(function(x, i){
+
+        return (
+          '<div class="photo-cell c' +
+          ((i % 3) + 1) +
+          '">' +
+
+          '<div class="pc-icon">' +
+          escapeHtml(
+            x.icon || "🍽️"
+          ) +
+          '</div>' +
+
+          '<div class="pc-label">' +
+          escapeHtml(
+            x.label || "Featured"
+          ) +
+          '</div>' +
+
+          '</div>'
+        );
+
+      })
+      .join("");
+
+  }
+
+
+  /* ---- ABOUT PILLS ---- */
+
+  var pills =
+    document.getElementById(
+      "aboutPills"
+    );
+
+  if(pills){
+
+    pills.innerHTML =
+      (ct.aboutPills || [])
+      .map(function(x){
+
+        return (
+          '<span class="about-pill">' +
+          escapeHtml(x) +
+          '</span>'
+        );
+
+      })
+      .join("");
+
+  }
+
+
+  /* ---- BUSINESS INFO STRIP ---- */
+
+  var strip =
+    document.getElementById(
+      "businessInfoStrip"
+    );
+
+  if(strip){
+
+    strip.innerHTML =
+
+      '<div class="dstrip-item">' +
+      '🏪 <strong>' +
+      escapeHtml(
+        CLIENT.businessType
+      ) +
+      '</strong></div>' +
+
+      '<div class="dstrip-sep">|</div>' +
+
+      '<div class="dstrip-item">' +
+      '📍 ' +
+      escapeHtml(
+        CLIENT.contact.mailingAddress ||
+        CLIENT.fulfillment.pickupLocation
+      ) +
+      '</div>' +
+
+      '<div class="dstrip-sep">|</div>' +
+
+      '<div class="dstrip-item">' +
+      '📞 <a href="tel:' +
+      escapeHtml(
+        String(
+          CLIENT.contact.phone || ""
+        )
+        .replace(
+          /[^0-9+]/g,
+          ""
+        )
+      ) +
+      '" style="color:var(--gold2);font-weight:700;text-decoration:none;">' +
+
+      escapeHtml(
+        CLIENT.contact.phone || ""
+      ) +
+
+      '</a></div>';
+
+  }
+     /* ---- PICKUP / DELIVERY / PAYMENT CARDS ---- */
+
+  var cards =
+    document.getElementById(
+      "fulfillmentCards"
+    );
+
+  if(cards){
+
+    cards.innerHTML =
+
+      '<div class="zone-card">' +
+
+      '<div class="zone-n" style="color:var(--gold2)">' +
+      'Pickup' +
+      '</div>' +
+
+      '<div class="zone-d">' +
+      escapeHtml(
+        CLIENT.fulfillment.pickupLocation
+      ) +
+      '</div>' +
+
+      '<div class="zone-s">' +
+      escapeHtml(
+        CLIENT.fulfillment.pickupNote || ""
+      ) +
+      '</div>' +
+
+      '</div>' +
+
+
+      '<div class="zone-card">' +
+
+      '<div class="zone-n" style="color:var(--pink)">' +
+      'Delivery' +
+      '</div>' +
+
+      '<div class="zone-d">' +
+      escapeHtml(
+        CLIENT.fulfillment.deliveryRules ||
+        "Contact us for delivery details."
+      ) +
+      '</div>' +
+
+      '</div>' +
+
+
+      '<div class="zone-card">' +
+
+      '<div class="zone-n" style="color:var(--gold2)">' +
+      'Payments' +
+      '</div>' +
+
+      '<div class="zone-d">' +
+      escapeHtml(
+        CLIENT.payments.displayText ||
+        "Square"
+      ) +
+      '</div>' +
+
+      '<div class="zone-s">' +
+      escapeHtml(
+        CLIENT.payments.policyText || ""
+      ) +
+      '</div>' +
+
+      '</div>' +
+
+
+      '<div class="zone-card">' +
+
+      '<div class="zone-n" style="color:#fff">' +
+      'Contact' +
+      '</div>' +
+
+      '<div class="zone-d">' +
+
+      '<a href="tel:' +
+      escapeHtml(
+        String(
+          CLIENT.contact.phone || ""
+        )
+        .replace(
+          /[^0-9+]/g,
+          ""
+        )
+      ) +
+      '" style="color:#fff;text-decoration:none;">' +
+
+      escapeHtml(
+        CLIENT.contact.phone || ""
+      ) +
+
+      '</a>' +
+
+      '</div>' +
+
+      '<div class="zone-s">' +
+
+      '<a href="mailto:' +
+      escapeHtml(
+        CLIENT.contact.email || ""
+      ) +
+      '" style="color:rgba(255,255,255,.55);text-decoration:none;">' +
+
+      escapeHtml(
+        CLIENT.contact.email || ""
+      ) +
+
+      '</a>' +
+
+      '</div>' +
+
+      '</div>';
+
+  }
+
+
+  /* ---- CART NOTE ---- */
+
+  setText(
+    "cartFooterNote",
+    "Menu prices load from " +
+    CLIENT.shortName +
+    " Square catalog when available."
+  );
+
+
+  /* ---- SQUARE ADMIN NOTE ---- */
+
+  setText(
+    "squarePanelNote",
+    "The public menu is pulled live from the " +
+    CLIENT.shortName +
+    " Square catalog."
+  );
+
+
+  /* ---- FOOTER DETAILS ---- */
+
+  var fd =
+    document.getElementById(
+      "footerDetails"
+    );
+
+  if(fd){
+
+    fd.innerHTML =
+
+      escapeHtml(
+        CLIENT.businessType
+      ) +
+
+      '<br/>' +
+
+      '<a href="tel:' +
+
+      escapeHtml(
+        String(
+          CLIENT.contact.phone || ""
+        )
+        .replace(
+          /[^0-9+]/g,
+          ""
+        )
+      ) +
+
+      '">' +
+
+      escapeHtml(
+        CLIENT.contact.phone || ""
+      ) +
+
+      '</a> · ' +
+
+      '<a href="mailto:' +
+
+      escapeHtml(
+        CLIENT.contact.email || ""
+      ) +
+
+      '">' +
+
+      escapeHtml(
+        CLIENT.contact.email || ""
+      ) +
+
+      '</a>' +
+
+      '<br/>Mailing: ' +
+
+      escapeHtml(
+        CLIENT.contact.mailingAddress || ""
+      ) +
+
+      '<br/>Pickup: ' +
+
+      escapeHtml(
+        CLIENT.fulfillment.pickupLocation
+      ) +
+
+      ' ' +
+
+      escapeHtml(
+        CLIENT.fulfillment.pickupNote || ""
+      ) +
+
+      '<br/>Payments: ' +
+
+      escapeHtml(
+        CLIENT.payments.displayText || ""
+      ) +
+
+      '<br/>© ' +
+
+      new Date().getFullYear() +
+
+      ' ' +
+
+      escapeHtml(
+        CLIENT.businessName
+      ) +
+
+      '.';
+
+  }
+
+
+  /* ---- OPTIONAL LOGO ---- */
+
+  if(CLIENT.logoUrl){
+
+    var badge =
+      document.querySelector(
+        ".crown-badge"
+      );
+
+    if(badge){
+
+      badge.innerHTML =
+
+        '<img src="' +
+        escapeHtml(
+          CLIENT.logoUrl
+        ) +
+        '" alt="' +
+        escapeHtml(
+          CLIENT.businessName
+        ) +
+        ' logo" style="width:100%;height:100%;object-fit:cover;border-radius:50%">';
+
+    }
+
+
+    var heroIcon =
+      document.getElementById(
+        "brandIconHero"
+      );
+
+    if(heroIcon){
+
+      heroIcon.innerHTML =
+
+        '<img src="' +
+        escapeHtml(
+          CLIENT.logoUrl
+        ) +
+        '" alt="' +
+        escapeHtml(
+          CLIENT.businessName
+        ) +
+        ' logo" style="max-width:110px;max-height:110px;border-radius:18px">';
+
+    }
+
+  }
+
+
+  /* ---- CHECKOUT INFORMATION ---- */
+
+  var info =
+    document.getElementById(
+      "checkoutInfoBox"
+    );
+
+  if(info){
+
+    info.innerHTML =
+
+      '📍 <strong>Pickup:</strong> ' +
+
+      escapeHtml(
+        CLIENT.fulfillment.pickupLocation
+      ) +
+
+      ' ' +
+
+      escapeHtml(
+        CLIENT.fulfillment.pickupNote || ""
+      ) +
+
+      '<br/><br/><strong>Delivery:</strong> ' +
+
+      escapeHtml(
+        CLIENT.fulfillment.deliveryRules ||
+        "Contact us for delivery availability."
+      ) +
+
+      '<br/><br/>💳 <strong>Payments:</strong> ' +
+
+      escapeHtml(
+        CLIENT.payments.displayText ||
+        "Square"
+      ) +
+
+      '. ' +
+
+      escapeHtml(
+        CLIENT.payments.policyText || ""
+      ) +
+
+      '<br/><br/>🔒 <strong>Secure checkout:</strong> Menu pricing can load from Square and card information is entered on Square, not on this website.';
+
+  }
+
+
+  /* ---- UPDATE PHONE / EMAIL LINKS ---- */
+
+  var phoneDigits =
+    String(
+      CLIENT.contact.phone || ""
+    )
+    .replace(
+      /[^0-9+]/g,
+      ""
+    );
+
+
+  document
+    .querySelectorAll(
+      'a[href^="tel:"]'
+    )
+    .forEach(function(a){
+
+      a.href =
+        "tel:" +
+        phoneDigits;
+
+      if(
+        a.textContent.trim()
+      ){
+
+        a.textContent =
+          CLIENT.contact.phone;
+
+      }
+
+    });
+
+
+  document
+    .querySelectorAll(
+      'a[href^="mailto:"]'
+    )
+    .forEach(function(a){
+
+      a.href =
+        "mailto:" +
+        CLIENT.contact.email;
+
+      if(
+        a.textContent.indexOf("@") > -1
+      ){
+
+        a.textContent =
+          CLIENT.contact.email;
+
+      }
+
+    });
+
+
+  /* ---- QR LABEL ---- */
+
+  document
+    .querySelectorAll(
+      ".qr-label"
+    )
+    .forEach(function(el){
+
+      el.textContent =
+        "📱 Scan to view " +
+        CLIENT.shortName +
+        " menu";
+
+    });
+
+}
+   /* ================================================================
+   START APPLICATION
+   ================================================================ */
+
+function init(){
+
+  applyClientConfig();
+
+  buildFeatured();
+
+  updateCartUI();
+
+  startSparks();
+
+  syncFromSquare(false);
+
+  generateMenuQRCodes();
+
+
+  document
+    .getElementById(
+      "cartBtn"
+    )
+    .addEventListener(
+      "click",
+      openCart
+    );
+
+
+  document
+    .getElementById(
+      "cartX"
+    )
+    .addEventListener(
+      "click",
+      closeCart
+    );
+
+
+  document
+    .getElementById(
+      "cartOverlay"
+    )
+    .addEventListener(
+      "click",
+      closeCart
+    );
+
+
+  document
+    .getElementById(
+      "cartGo"
+    )
+    .addEventListener(
+      "click",
+      function(){
+
+        if(!cart.length){
+
+          toast(
+            "Add items first!"
+          );
+
+          return;
+
+        }
+
+        closeCart();
+
+        go(
+          "checkout"
+        );
+
+      }
+    );
+
+
+  if(
+    window.location.hash ===
+    "#menu"
+  ){
+
+    go(
+      "menu"
+    );
+
+  }
+
+}
+
+
+/* ================================================================
+   QR CODES
+   ================================================================ */
+
+function generateMenuQRCodes(){
+
+  if(
+    typeof QRCode ===
+    "undefined"
+  ){
+
+    setTimeout(
+      generateMenuQRCodes,
+      300
+    );
+
+    return;
+
+  }
+
+
+  var menuUrl =
+    SITE_URL +
+    "#menu";
+
+
+  [
+    {
+      id: "footerQR",
+      size: 120
+    },
+
+    {
+      id: "adminQR",
+      size: 220
+    }
+
+  ]
+  .forEach(
+    function(cfg){
+
+      var el =
+        document.getElementById(
+          cfg.id
+        );
+
+      if(!el){
+        return;
+      }
+
+
+      el.innerHTML = "";
+
+
+      new QRCode(
+        el,
+        {
+
+          text:
+            menuUrl,
+
+          width:
+            cfg.size,
+
+          height:
+            cfg.size,
+
+          colorDark:
+            CLIENT.colors.primary,
+
+          colorLight:
+            "#ffffff",
+
+          correctLevel:
+            QRCode.CorrectLevel.M
+
+        }
+      );
+
+    }
+  );
+
+
+  var linkEl =
+    document.getElementById(
+      "qrLinkDisplay"
+    );
+
+
+  if(linkEl){
+
+    linkEl.textContent =
+      menuUrl;
+
+  }
+
+}
+
+
+/* ================================================================
+   DOWNLOAD QR
+   ================================================================ */
+
+function downloadMenuQR(){
+
+  var container =
+    document.getElementById(
+      "adminQR"
+    );
+
+
+  var canvas =
+    container
+      ? container.querySelector(
+          "canvas"
+        )
+      : null;
+
+
+  if(!canvas){
+
+    toast(
+      "QR code isn't ready yet — try again in a moment."
+    );
+
+    return;
+
+  }
+
+
+  var link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href =
+    canvas.toDataURL(
+      "image/png"
+    );
+
+
+  link.download =
+    (CLIENT.key || "menu") +
+    "-Menu-QR.png";
+
+
+  document.body
+    .appendChild(
+      link
+    );
+
+
+  link.click();
+
+
+  document.body
+    .removeChild(
+      link
+    );
+
+
+  toast(
+    "QR code downloaded."
+  );
+
+}
+
+window.downloadMenuQR =
   downloadMenuQR;
+   /* ================================================================
+   COPY MENU LINK
+   ================================================================ */
+
+function copyMenuLink(){
+
+  var url =
+    SITE_URL +
+    "#menu";
+
+  if(
+    navigator.clipboard &&
+    navigator.clipboard.writeText
+  ){
+
+    navigator.clipboard
+      .writeText(url)
+      .then(
+        function(){
+          toast(
+            "Menu link copied!"
+          );
+        },
+        function(){
+          toast(
+            "Copy failed — link: " +
+            url
+          );
+        }
+      );
+
+  } else {
+
+    toast(
+      "Copy manually: " +
+      url
+    );
+
+  }
+
+}
+
+window.copyMenuLink =
+  copyMenuLink;
+
+
+/* ================================================================
+   PAGE NAVIGATION
+   ================================================================ */
+
+function go(name){
+
+  var pgs =
+    document.querySelectorAll(
+      ".pg"
+    );
+
+  for(
+    var i = 0;
+    i < pgs.length;
+    i++
+  ){
+
+    pgs[i]
+      .classList
+      .remove("on");
+
+  }
+
+
+  var target =
+    document.getElementById(
+      "pg-" + name
+    );
+
+  if(!target){
+    return;
+  }
+
+
+  target
+    .classList
+    .add("on");
+
+
+  window.scrollTo(
+    0,
+    0
+  );
+
+
+  if(
+    name === "menu" &&
+    !menuBuilt
+  ){
+
+    buildMenu();
+
+  }
+
+
+  if(
+    name === "checkout"
+  ){
+
+    buildSummary();
+
+  }
+
+
+  if(
+    name === "admin"
+  ){
+
+    if(!adminKey){
+
+      openAdminLogin();
+
+      return;
+
+    }
+
+    switchAdminTab(
+      "orders"
+    );
+
+    loadAdminOrders();
+
+    refreshAdminStats();
+
+  }
+
+}
+
+window.go =
+  go;
+
+
+/* ================================================================
+   CART HELPERS
+   ================================================================ */
+
+function cartTotal(){
+
+  return cart.reduce(
+    function(sum, item){
+
+      return (
+        sum +
+        item.price *
+        item.qty
+      );
+
+    },
+    0
+  );
+
+}
+
+
+function cartCount(){
+
+  return cart.reduce(
+    function(sum, item){
+
+      return (
+        sum +
+        item.qty
+      );
+
+    },
+    0
+  );
+
+}
+
+
+function addToCart(
+  id,
+  name,
+  price
+){
+
+  for(
+    var i = 0;
+    i < cart.length;
+    i++
+  ){
+
+    if(
+      cart[i].id === id
+    ){
+
+      cart[i].qty++;
+
+      updateCartUI();
+
+      toast(
+        "Added: " +
+        name
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  cart.push(
+    {
+      id: id,
+      name: name,
+      price: Number(price || 0),
+      qty: 1
+    }
+  );
+
+
+  updateCartUI();
+
+
+  toast(
+    "Added: " +
+    name
+  );
+
+}
+
+window.addToCart =
+  addToCart;
+
+
+function changeQty(
+  id,
+  direction
+){
+
+  for(
+    var i = 0;
+    i < cart.length;
+    i++
+  ){
+
+    if(
+      cart[i].id === id
+    ){
+
+      cart[i].qty +=
+        direction;
+
+
+      if(
+        cart[i].qty <= 0
+      ){
+
+        cart.splice(
+          i,
+          1
+        );
+
+      }
+
+      break;
+
+    }
+
+  }
+
+
+  updateCartUI();
+
+  renderCartItems();
+
+}
+
+window.changeQty =
+  changeQty;
+
+
+/* ================================================================
+   CART DISPLAY
+   ================================================================ */
+
+function updateCartUI(){
+
+  var count =
+    cartCount();
+
+
+  var badge =
+    document.getElementById(
+      "cartBadge"
+    );
+
+
+  if(!badge){
+    return;
+  }
+
+
+  badge.textContent =
+    count;
+
+
+  if(
+    count > 0
+  ){
+
+    badge
+      .classList
+      .add("on");
+
+  } else {
+
+    badge
+      .classList
+      .remove("on");
+
+  }
+
+}
+
+
+function openCart(){
+
+  renderCartItems();
+
+
+  document
+    .getElementById(
+      "cartOverlay"
+    )
+    .classList
+    .add("on");
+
+
+  document
+    .getElementById(
+      "cartDrawer"
+    )
+    .classList
+    .add("on");
+
+}
+
+
+function closeCart(){
+
+  document
+    .getElementById(
+      "cartOverlay"
+    )
+    .classList
+    .remove("on");
+
+
+  document
+    .getElementById(
+      "cartDrawer"
+    )
+    .classList
+    .remove("on");
+
+}
+
+
+function renderCartItems(){
+
+  var scroll =
+    document.getElementById(
+      "cartScroll"
+    );
+
+  var footer =
+    document.getElementById(
+      "cartFt"
+    );
+
+  var totals =
+    document.getElementById(
+      "cartTots"
+    );
+
+
+  if(
+    !scroll ||
+    !footer ||
+    !totals
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !cart.length
+  ){
+
+    scroll.innerHTML =
+
+      '<div class="cart-empty-msg">' +
+
+      '<div class="ei">' +
+      escapeHtml(
+        CLIENT.icon || "🛒"
+      ) +
+      '</div>' +
+
+      '<p>Your cart is empty.<br/>' +
+      'Add something from the menu!</p>' +
+
+      '</div>';
+
+
+    footer.style.display =
+      "none";
+
+
+    return;
+
+  }
+
+
+  var html =
+    "";
+
+
+  for(
+    var i = 0;
+    i < cart.length;
+    i++
+  ){
+
+    var item =
+      cart[i];
+
+
+    html +=
+
+      '<div class="centry">' +
+
+      '<div class="centry-info">' +
+
+      '<div class="centry-name">' +
+      escapeHtml(
+        item.name
+      ) +
+      '</div>' +
+
+      '<div class="centry-unit">' +
+      formatPrice(
+        item.price
+      ) +
+      ' each</div>' +
+
+      '</div>' +
+
+      '<div class="centry-qty">' +
+
+      '<button class="qbtn" onclick="changeQty(' +
+      jsString(
+        item.id
+      ) +
+      ',-1)">-</button>' +
+
+      '<span class="qnum">' +
+      Number(
+        item.qty
+      ) +
+      '</span>' +
+
+      '<button class="qbtn" onclick="changeQty(' +
+      jsString(
+        item.id
+      ) +
+      ',1)">+</button>' +
+
+      '</div>' +
+
+      '<div class="centry-tot">' +
+      formatPrice(
+        item.price *
+        item.qty
+      ) +
+      '</div>' +
+
+      '</div>';
+
+  }
+
+
+  scroll.innerHTML =
+    html;
+
+
+  var subtotal =
+    cartTotal();
+
+
+  totals.innerHTML =
+
+    '<div class="ctot-row big">' +
+
+    '<span>Total</span>' +
+
+    '<span>' +
+    formatPrice(
+      subtotal
+    ) +
+    '</span>' +
+
+    '</div>';
+
+
+  footer.style.display =
+    "block";
+
+}
+
+
+/* ================================================================
+   SAFE TEXT / PRICE HELPERS
+   ================================================================ */
+
+function escapeHtml(value){
+
+  return String(
+    value == null
+      ? ""
+      : value
+  )
+
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+
+  .replace(
+    /</g,
+    "&lt;"
+  )
+
+  .replace(
+    />/g,
+    "&gt;"
+  )
+
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+function jsString(value){
+
+  var s =
+    String(
+      value == null
+        ? ""
+        : value
+    );
+
+
+  s = s
+    .replace(
+      /\\/g,
+      "\\\\"
+    )
+    .replace(
+      /'/g,
+      "\\'"
+    )
+    .replace(
+      /\n/g,
+      "\\n"
+    )
+    .replace(
+      /\r/g,
+      "\\r"
+    );
+
+
+  return (
+    "'" +
+    s +
+    "'"
+  );
+
+}
+
+
+function formatPrice(price){
+
+  var n =
+    Number(
+      price || 0
+    );
+
+
+  return (
+    n > 0
+      ? "$" +
+        n.toFixed(2)
+      : "Price varies"
+  );
+
+}
+
+
+function slugify(value){
+
+  var s =
+    String(
+      value ||
+      "category"
+    )
+    .toLowerCase()
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
+
+
+  return (
+    s ||
+    "category"
+  );
+
+}
+
+
+/* ================================================================
+   MENU OVERRIDES
+
+   Availability and price changes are saved per client/device.
+   ================================================================ */
+
+function lsGet(key){
+
+  try{
+
+    return JSON.parse(
+      localStorage.getItem(
+        key
+      ) ||
+      "null"
+    );
+
+  } catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function lsSet(
+  key,
+  value
+){
+
+  try{
+
+    localStorage.setItem(
+      key,
+      JSON.stringify(
+        value
+      )
+    );
+
+  } catch(error){
+
+  }
+
+}
+
+
+function getOverrides(){
+
+  return (
+    lsGet(
+      OVERRIDE_STORAGE_KEY
+    ) ||
+    {}
+  );
+
+}
+
+
+function setOverrides(value){
+
+  lsSet(
+    OVERRIDE_STORAGE_KEY,
+    value
+  );
+
+}
+
+
+function getEffective(item){
+
+  var overrides =
+    getOverrides();
+
+
+  var override =
+    overrides[
+      item.id
+    ];
+
+
+  return {
+
+    id:
+      item.id,
+
+    squareItemId:
+      item.squareItemId ||
+      null,
+
+    squareVariationId:
+      item.squareVariationId ||
+      null,
+
+    name:
+      item.name,
+
+    desc:
+      item.desc,
+
+    price:
+      (
+        override &&
+        override.price != null
+      )
+        ? parseFloat(
+            override.price
+          )
+        : Number(
+            item.price || 0
+          ),
+
+    available:
+      (
+        override &&
+        override.available ===
+        false
+      )
+        ? false
+        : true
+
+  };
+
+}
+
+
+function allMenuItems(){
+
+  var items =
+    [];
+
+
+  MENU.forEach(
+    function(category){
+
+      category.items
+        .forEach(
+          function(item){
+
+            items.push(
+              item
+            );
+
+          }
+        );
+
+    }
+  );
+
+
+  return items;
+
+}
+
+
+/* ================================================================
+   FEATURED ITEMS
+   ================================================================ */
+
+function buildFeatured(){
+
+  var el =
+    document.getElementById(
+      "featGrid"
+    );
+
+
+  if(!el){
+    return;
+  }
+
+
+  var allItems =
+    allMenuItems();
+
+
+  var items =
+    allItems.filter(
+      function(item){
+
+        return (
+          FEATURED_IDS
+            .indexOf(
+              item.id
+            ) >
+          -1
+        );
+
+      }
+    );
+
+
+  if(
+    !items.length
+  ){
+
+    items =
+      allItems.slice(
+        0,
+        4
+      );
+
+  }
+
+
+  var icons =
+    (
+      CLIENT.featuredIcons &&
+      CLIENT.featuredIcons.length
+    )
+      ? CLIENT.featuredIcons
+      : [
+          "🍽️",
+          "🍴",
+          "🥤",
+          "⭐"
+        ];
+
+
+  var html =
+    "";
+
+  var shown =
+    0;
+
+
+  for(
+    var i = 0;
+    i < items.length &&
+    shown < 4;
+    i++
+  ){
+
+    var effective =
+      getEffective(
+        items[i]
+      );
+
+
+    if(
+      !effective.available
+    ){
+
+      continue;
+
+    }
+
+
+    shown++;
+
+
+    html +=
+
+      '<div class="feat-card">' +
+
+      (
+        squareSyncInfo.lastSync
+          ? '<span class="sample-tag">Square</span>'
+          : '<span class="sample-tag">Sample</span>'
+      ) +
+
+      '<div class="feat-ic">' +
+      escapeHtml(
+        icons[
+          i %
+          icons.length
+        ]
+      ) +
+      '</div>' +
+
+      '<h4>' +
+      escapeHtml(
+        effective.name
+      ) +
+      '</h4>' +
+
+      '<p>' +
+      escapeHtml(
+        effective.desc ||
+        CLIENT.businessName +
+        " menu item."
+      ) +
+      '</p>' +
+
+      '<div class="feat-foot">' +
+
+      '<div class="feat-price">' +
+      formatPrice(
+        effective.price
+      ) +
+      '</div>' +
+
+
+      (
+        effective.price > 0
+
+          ? '<button class="feat-add-btn" onclick="addToCart(' +
+            jsString(
+              effective.id
+            ) +
+            ',' +
+            jsString(
+              effective.name
+            ) +
+            ',' +
+            Number(
+              effective.price
+            ) +
+            ')">+ Add</button>'
+
+          : '<button class="feat-add-btn" onclick="toast(' +
+            jsString(
+              "Contact " +
+              CLIENT.shortName +
+              " for pricing."
+            ) +
+            ')">Quote</button>'
+      ) +
+
+      '</div>' +
+
+      '</div>';
+
+  }
+
+
+  el.innerHTML =
+    html ||
+    '<div class="sync-status">Menu items will appear here after Square sync.</div>';
+
+}
+
+
+/* ================================================================
+   BUILD PUBLIC MENU
+   ================================================================ */
+
+function buildMenu(){
+
+  menuBuilt =
+    true;
+
+
+  var tabs =
+    "";
+
+  var body =
+    "";
+
+
+  for(
+    var c = 0;
+    c < MENU.length;
+    c++
+  ){
+
+    var category =
+      MENU[c];
+
+    var first =
+      c === 0;
+
+
+    tabs +=
+
+      '<button class="mtab' +
+      (
+        first
+          ? " on"
+          : ""
+      ) +
+      '" id="mt-' +
+      escapeHtml(
+        category.key
+      ) +
+      '" onclick="switchCat(' +
+      jsString(
+        category.key
+      ) +
+      ')">' +
+      escapeHtml(
+        category.label
+      ) +
+      '</button>';
+
+
+    var rows =
+      "";
+
+
+    for(
+      var i = 0;
+      i < category.items.length;
+      i++
+    ){
+
+      var effective =
+        getEffective(
+          category.items[i]
+        );
+
+
+      if(
+        !effective.available
+      ){
+
+        rows +=
+
+          '<div class="mcard sold">' +
+
+          '<div>' +
+
+          '<div class="mcard-name">' +
+          escapeHtml(
+            effective.name
+          ) +
+          ' <span class="sold-tag">SOLD OUT</span>' +
+          '</div>' +
+
+          '<div class="mcard-desc">' +
+          escapeHtml(
+            effective.desc ||
+            ""
+          ) +
+          '</div>' +
+
+          '</div>' +
+
+          '<div class="mcard-right">' +
+
+          '<div class="mcard-price">&mdash;</div>' +
+
+          '</div>' +
+
+          '</div>';
+
+
+        continue;
+
+      }
+
+
+      rows +=
+
+        '<div class="mcard">' +
+
+        '<div>' +
+
+        '<div class="mcard-name">' +
+        escapeHtml(
+          effective.name
+        ) +
+        '</div>' +
+
+        '<div class="mcard-desc">' +
+        escapeHtml(
+          effective.desc ||
+          ""
+        ) +
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="mcard-right">' +
+
+        '<div class="mcard-price">' +
+        formatPrice(
+          effective.price
+        ) +
+        '</div>' +
+
+
+        (
+          effective.price > 0
+
+            ? '<button class="mcard-add" onclick="addToCart(' +
+              jsString(
+                effective.id
+              ) +
+              ',' +
+              jsString(
+                effective.name
+              ) +
+              ',' +
+              Number(
+                effective.price
+              ) +
+              ')">+ Add</button>'
+
+            : '<button class="mcard-add" onclick="toast(' +
+              jsString(
+                "Contact " +
+                CLIENT.shortName +
+                " for pricing."
+              ) +
+              ')">Quote</button>'
+        ) +
+
+        '</div>' +
+
+        '</div>';
+
+    }
+
+
+    body +=
+
+      '<div class="msec' +
+      (
+        first
+          ? " on"
+          : ""
+      ) +
+      '" id="ms-' +
+      escapeHtml(
+        category.key
+      ) +
+      '">' +
+
+      '<h3>' +
+      escapeHtml(
+        category.label
+      ) +
+      '</h3>' +
+
+      '<div class="items-grid">' +
+      rows +
+      '</div>' +
+
+      '</div>';
+
+  }
+
+
+  document
+    .getElementById(
+      "menuTabs"
+    )
+    .innerHTML =
+      tabs;
+
+
+  document
+    .getElementById(
+      "menuBody"
+    )
+    .innerHTML =
+      body ||
+      '<div class="sync-status">No menu items are currently available.</div>';
+
+}
+
+
+function switchCat(key){
+
+  var tabs =
+    document.querySelectorAll(
+      ".mtab"
+    );
+
+
+  var sections =
+    document.querySelectorAll(
+      ".msec"
+    );
+
+
+  for(
+    var i = 0;
+    i < tabs.length;
+    i++
+  ){
+
+    tabs[i]
+      .classList
+      .remove("on");
+
+  }
+
+
+  for(
+    var j = 0;
+    j < sections.length;
+    j++
+  ){
+
+    sections[j]
+      .classList
+      .remove("on");
+
+  }
+
+
+  var tab =
+    document.getElementById(
+      "mt-" + key
+    );
+
+
+  var section =
+    document.getElementById(
+      "ms-" + key
+    );
+
+
+  if(tab){
+
+    tab
+      .classList
+      .add("on");
+
+  }
+
+
+  if(section){
+
+    section
+      .classList
+      .add("on");
+
+  }
+
+}
+
+window.switchCat =
+  switchCat;
+   /* ================================================================
+   SQUARE CATALOG → MENU
+   ================================================================ */
+
+function squareCatalogToMenu(objects){
+
+  var categories =
+    {};
+
+  var categoryOrder =
+    [];
+
+
+  objects.forEach(
+    function(obj){
+
+      if(
+        obj &&
+        obj.type === "CATEGORY" &&
+        obj.category_data &&
+        !obj.is_deleted
+      ){
+
+        var label =
+          obj.category_data.name ||
+          "Square Catalog";
+
+
+        categories[
+          obj.id
+        ] = {
+
+          key:
+            "sq-" +
+            slugify(
+              label
+            ) +
+            "-" +
+            String(
+              obj.id
+            )
+            .slice(-5)
+            .replace(
+              /[^a-zA-Z0-9]/g,
+              ""
+            ),
+
+          label:
+            label,
+
+          items:
+            []
+
+        };
+
+
+        categoryOrder.push(
+          obj.id
+        );
+
+      }
+
+    }
+  );
+
+
+  var uncategorized = {
+
+    key:
+      "sq-uncategorized",
+
+    label:
+      "Other Items",
+
+    items:
+      []
+
+  };
+
+
+  objects.forEach(
+    function(obj){
+
+      if(
+        !obj ||
+        obj.type !== "ITEM" ||
+        !obj.item_data ||
+        obj.is_deleted
+      ){
+
+        return;
+
+      }
+
+
+      var data =
+        obj.item_data;
+
+
+      if(
+        data.is_archived ===
+        true
+      ){
+
+        return;
+
+      }
+
+
+      var baseName =
+        data.name ||
+        CLIENT.shortName +
+        " Item";
+
+
+      var description =
+        data.description ||
+        data.description_plaintext ||
+        "";
+
+
+      var variations =
+        Array.isArray(
+          data.variations
+        )
+
+          ? data.variations.filter(
+              function(v){
+
+                return (
+                  v &&
+                  !v.is_deleted &&
+                  v.item_variation_data
+                );
+
+              }
+            )
+
+          : [];
+
+
+      if(
+        !variations.length
+      ){
+
+        return;
+
+      }
+
+
+      var categoryIds =
+        [];
+
+
+      if(
+        Array.isArray(
+          data.categories
+        )
+      ){
+
+        data.categories
+          .forEach(
+            function(category){
+
+              if(
+                category &&
+                category.id
+              ){
+
+                categoryIds.push(
+                  category.id
+                );
+
+              }
+
+            }
+          );
+
+      }
+
+
+      if(
+        data.category_id
+      ){
+
+        categoryIds.push(
+          data.category_id
+        );
+
+      }
+
+
+      var categoryId =
+        categoryIds.length
+          ? categoryIds[0]
+          : null;
+
+
+      var target =
+        (
+          categoryId &&
+          categories[
+            categoryId
+          ]
+        )
+
+          ? categories[
+              categoryId
+            ]
+
+          : uncategorized;
+
+
+      variations
+        .forEach(
+          function(
+            variation,
+            index
+          ){
+
+            var variationData =
+              variation.item_variation_data ||
+              {};
+
+
+            if(
+              variationData.sellable ===
+              false
+            ){
+
+              return;
+
+            }
+
+
+            var amount =
+              Number(
+                (
+                  variationData.price_money ||
+                  {}
+                ).amount ||
+                0
+              ) /
+              100;
+
+
+            var variationName =
+              variationData.name ||
+              "";
+
+
+            var displayName =
+              baseName;
+
+
+            if(
+              variations.length > 1 &&
+              variationName &&
+              variationName
+                .toLowerCase() !==
+              "regular"
+            ){
+
+              displayName +=
+                " — " +
+                variationName;
+
+            }
+
+
+            target.items.push(
+              {
+
+                id:
+                  "sq-" +
+                  String(
+                    variation.id ||
+                    obj.id
+                  ) +
+                  "-" +
+                  index,
+
+                squareItemId:
+                  obj.id,
+
+                squareVariationId:
+                  variation.id ||
+                  null,
+
+                name:
+                  displayName,
+
+                price:
+                  amount,
+
+                desc:
+                  description ||
+                  (
+                    variationName &&
+                    variationName
+                      .toLowerCase() !==
+                    "regular"
+
+                      ? variationName
+
+                      : CLIENT.businessName
+                  )
+
+              }
+            );
+
+          }
+        );
+
+    }
+  );
+
+
+  var menu =
+    [];
+
+
+  categoryOrder
+    .forEach(
+      function(id){
+
+        if(
+          categories[id] &&
+          categories[id]
+            .items
+            .length
+        ){
+
+          menu.push(
+            categories[id]
+          );
+
+        }
+
+      }
+    );
+
+
+  if(
+    uncategorized
+      .items
+      .length
+  ){
+
+    menu.push(
+      uncategorized
+    );
+
+  }
+
+
+  return menu;
+
+}
+
+
+/* ================================================================
+   LIVE SQUARE SYNC
+   ================================================================ */
+
+async function syncFromSquare(showToast){
+
+  var syncBtn =
+    document.getElementById(
+      "syncBtn"
+    );
+
+
+  var syncStatus =
+    document.getElementById(
+      "syncStatus"
+    );
+
+
+  if(syncBtn){
+
+    syncBtn.disabled =
+      true;
+
+    syncBtn.textContent =
+      "Syncing…";
+
+  }
+
+
+  if(syncStatus){
+
+    syncStatus.className =
+      "sync-status";
+
+    syncStatus.textContent =
+      "Loading live " +
+      CLIENT.shortName +
+      " catalog from Square…";
+
+  }
+
+
+  try{
+
+    var response =
+      await fetch(
+        SQUARE_CATALOG_URL,
+        {
+
+          method:
+            "GET",
+
+          headers:
+            {
+              "Accept":
+                "application/json"
+            },
+
+          cache:
+            "no-store"
+
+        }
+      );
+
+
+    var data =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !data.ok ||
+      !Array.isArray(
+        data.objects
+      )
+    ){
+
+      throw new Error(
+        data.error ||
+        "Square catalog could not be loaded."
+      );
+
+    }
+
+
+    var newMenu =
+      squareCatalogToMenu(
+        data.objects
+      );
+
+
+    if(
+      !newMenu.length
+    ){
+
+      throw new Error(
+        "Square returned no sellable menu items."
+      );
+
+    }
+
+
+    MENU =
+      newMenu;
+
+
+    menuBuilt =
+      false;
+
+
+    var itemCount =
+      0;
+
+
+    MENU.forEach(
+      function(category){
+
+        itemCount +=
+          category.items.length;
+
+      }
+    );
+
+
+    squareSyncInfo = {
+
+      itemCount:
+        itemCount,
+
+      categoryCount:
+        MENU.length,
+
+      lastSync:
+        new Date(),
+
+      error:
+        null
+
+    };
+
+
+    buildFeatured();
+
+
+    var menuPage =
+      document.getElementById(
+        "pg-menu"
+      );
+
+
+    if(
+      menuPage &&
+      menuPage
+        .classList
+        .contains("on")
+    ){
+
+      buildMenu();
+
+    }
+
+
+    var menuAdminPanel =
+      document.getElementById(
+        "apanel-menu"
+      );
+
+
+    if(
+      menuAdminPanel &&
+      menuAdminPanel
+        .classList
+        .contains("on")
+    ){
+
+      buildMenuMgmt();
+
+    }
+
+
+    refreshAdminStats();
+
+
+    if(syncStatus){
+
+      syncStatus.className =
+        "sync-status ok";
+
+
+      syncStatus.textContent =
+        "Square sync successful. " +
+        itemCount +
+        " sellable menu choices across " +
+        MENU.length +
+        " categories.";
+
+    }
+
+
+    if(showToast){
+
+      toast(
+        "Square menu synced."
+      );
+
+    }
+
+
+  } catch(error){
+
+    squareSyncInfo.error =
+      error &&
+      error.message
+
+        ? error.message
+
+        : "Square sync failed.";
+
+
+    if(syncStatus){
+
+      syncStatus.className =
+        "sync-status err";
+
+
+      syncStatus.textContent =
+        "Square sync failed: " +
+        squareSyncInfo.error +
+        " The website is keeping the last available menu.";
+
+    }
+
+
+    if(showToast){
+
+      toast(
+        "Square sync failed."
+      );
+
+    }
+
+
+    console.error(
+      CLIENT.shortName +
+      " Square sync error:",
+      error
+    );
+
+
+  } finally {
+
+    if(syncBtn){
+
+      syncBtn.disabled =
+        false;
+
+
+      syncBtn.textContent =
+        "↻ Sync Menu from Square";
+
+    }
+
+  }
+
+}
+
+window.syncFromSquare =
+  syncFromSquare;
+   /* ================================================================
+   ADMIN TABS
+   ================================================================ */
+
+function switchAdminTab(tab){
+
+  document
+    .getElementById(
+      "atab-orders"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "orders"
+    );
+
+
+  document
+    .getElementById(
+      "atab-menu"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "menu"
+    );
+
+
+  document
+    .getElementById(
+      "atab-square"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "square"
+    );
+
+
+  document
+    .getElementById(
+      "atab-qr"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "qr"
+    );
+
+
+  document
+    .getElementById(
+      "apanel-orders"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "orders"
+    );
+
+
+  document
+    .getElementById(
+      "apanel-menu"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "menu"
+    );
+
+
+  document
+    .getElementById(
+      "apanel-square"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "square"
+    );
+
+
+  document
+    .getElementById(
+      "apanel-qr"
+    )
+    .classList
+    .toggle(
+      "on",
+      tab === "qr"
+    );
+
+
+  if(
+    tab === "square"
+  ){
+
+    refreshAdminStats();
+
+  }
+
+
+  if(
+    tab === "menu"
+  ){
+
+    buildMenuMgmt();
+
+  }
+
+}
+
+window.switchAdminTab =
+  switchAdminTab;
+
+
+/* ================================================================
+   ADMIN LOGIN
+   ================================================================ */
+
+function openAdminLogin(){
+
+  if(adminKey){
+
+    validateAdminKey(
+      adminKey,
+      true
+    );
+
+    return;
+
+  }
+
+
+  var overlay =
+    document.getElementById(
+      "adminLoginOverlay"
+    );
+
+
+  var input =
+    document.getElementById(
+      "adminPassword"
+    );
+
+
+  var msg =
+    document.getElementById(
+      "adminLoginMsg"
+    );
+
+
+  if(msg){
+
+    msg.textContent =
+      "";
+
+  }
+
+
+  if(input){
+
+    input.value =
+      "";
+
+  }
+
+
+  if(overlay){
+
+    overlay
+      .classList
+      .add("on");
+
+
+    overlay
+      .setAttribute(
+        "aria-hidden",
+        "false"
+      );
+
+  }
+
+
+  setTimeout(
+    function(){
+
+      if(input){
+
+        input.focus();
+
+      }
+
+    },
+    50
+  );
+
+}
+
+window.openAdminLogin =
+  openAdminLogin;
+
+
+function closeAdminLogin(){
+
+  var overlay =
+    document.getElementById(
+      "adminLoginOverlay"
+    );
+
+
+  if(overlay){
+
+    overlay
+      .classList
+      .remove("on");
+
+
+    overlay
+      .setAttribute(
+        "aria-hidden",
+        "true"
+      );
+
+  }
+
+}
+
+window.closeAdminLogin =
+  closeAdminLogin;
+
+
+/* ================================================================
+   VALIDATE ADMIN PASSWORD
+   ================================================================ */
+
+async function validateAdminKey(
+  key,
+  openPage
+){
+
+  var msg =
+    document.getElementById(
+      "adminLoginMsg"
+    );
+
+
+  var btn =
+    document.getElementById(
+      "adminLoginBtn"
+    );
+
+
+  if(btn){
+
+    btn.disabled =
+      true;
+
+    btn.textContent =
+      "Checking…";
+
+  }
+
+
+  if(msg){
+
+    msg.textContent =
+      "";
+
+  }
+
+
+  try{
+
+    var response =
+      await fetch(
+        BACKEND_URL +
+        "/admin/auth",
+        {
+
+          method:
+            "POST",
+
+          headers:
+            {
+
+              "Accept":
+                "application/json",
+
+              "X-Admin-Key":
+                key
+
+            },
+
+          cache:
+            "no-store"
+
+        }
+      );
+
+
+    var data =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !data.ok ||
+      !data.authorized
+    ){
+
+      throw new Error(
+        data.error ||
+        "Incorrect password."
+      );
+
+    }
+
+
+    adminKey =
+      key;
+
+
+    sessionStorage.setItem(
+      ADMIN_STORAGE_KEY,
+      key
+    );
+
+
+    closeAdminLogin();
+
+
+    if(openPage){
+
+      go(
+        "admin"
+      );
+
+    }
+
+
+    return true;
+
+
+  } catch(error){
+
+    adminKey =
+      "";
+
+
+    sessionStorage.removeItem(
+      ADMIN_STORAGE_KEY
+    );
+
+
+    if(msg){
+
+      msg.textContent =
+        error &&
+        error.message
+
+          ? error.message
+
+          : "Incorrect password.";
+
+    }
+
+
+    return false;
+
+
+  } finally {
+
+    if(btn){
+
+      btn.disabled =
+        false;
+
+      btn.textContent =
+        "Sign In";
+
+    }
+
+  }
+
+}
+
+
+/* ================================================================
+   SUBMIT ADMIN LOGIN
+   ================================================================ */
+
+async function submitAdminLogin(){
+
+  var input =
+    document.getElementById(
+      "adminPassword"
+    );
+
+
+  var key =
+    input
+      ? input.value
+      : "";
+
+
+  if(!key){
+
+    var msg =
+      document.getElementById(
+        "adminLoginMsg"
+      );
+
+
+    if(msg){
+
+      msg.textContent =
+        "Enter the admin password.";
+
+    }
+
+
+    return;
+
+  }
+
+
+  await validateAdminKey(
+    key,
+    true
+  );
+
+}
+
+window.submitAdminLogin =
+  submitAdminLogin;
+
+
+/* ================================================================
+   ADMIN LOGOUT
+   ================================================================ */
+
+function adminLogout(){
+
+  adminKey =
+    "";
+
+
+  sessionStorage.removeItem(
+    ADMIN_STORAGE_KEY
+  );
+
+
+  go(
+    "home"
+  );
+
+
+  toast(
+    "Admin signed out."
+  );
+
+}
+
+window.adminLogout =
+  adminLogout;
+
+
+/* ================================================================
+   ADMIN SQUARE STATUS
+   ================================================================ */
+
+function refreshAdminStats(){
+
+  var squareItems =
+    document.getElementById(
+      "aSquareItems"
+    );
+
+
+  var squareCategories =
+    document.getElementById(
+      "aSquareCats"
+    );
+
+
+  if(squareItems){
+
+    squareItems.textContent =
+      squareSyncInfo.itemCount ||
+      "—";
+
+  }
+
+
+  if(squareCategories){
+
+    squareCategories.textContent =
+      squareSyncInfo.categoryCount ||
+      "—";
+
+  }
+
+
+  var status =
+    document.getElementById(
+      "syncStatus"
+    );
+
+
+  if(
+    status &&
+    squareSyncInfo.lastSync
+  ){
+
+    status.className =
+      "sync-status ok";
+
+
+    status.textContent =
+      "Square catalog connected. " +
+      squareSyncInfo.itemCount +
+      " sellable menu choices across " +
+      squareSyncInfo.categoryCount +
+      " categories.";
+
+
+  } else if(
+    status &&
+    squareSyncInfo.error
+  ){
+
+    status.className =
+      "sync-status err";
+
+
+    status.textContent =
+      "Square sync issue: " +
+      squareSyncInfo.error;
+
+  }
+
+}
+ /* ================================================================
+   ADMIN: EDIT MENU
+   On/off + price overrides, saved per device/client
+   ================================================================ */
+
+function buildMenuMgmt(){
+
+  var el =
+    document.getElementById(
+      "mmBody"
+    );
+
+
+  if(!el){
+    return;
+  }
+
+
+  if(
+    !MENU.length
+  ){
+
+    el.innerHTML =
+      '<div class="no-orders">No menu items loaded yet — try Square Sync first.</div>';
+
+    return;
+
+  }
+
+
+  var overrides =
+    getOverrides();
+
+
+  var html =
+    "";
+
+
+  for(
+    var c = 0;
+    c < MENU.length;
+    c++
+  ){
+
+    var category =
+      MENU[c];
+
+
+    var rows =
+      "";
+
+
+    for(
+      var i = 0;
+      i < category.items.length;
+      i++
+    ){
+
+      var item =
+        category.items[i];
+
+
+      var override =
+        overrides[
+          item.id
+        ] ||
+        {};
+
+
+      var price =
+        (
+          override.price != null
+        )
+          ? parseFloat(
+              override.price
+            )
+          : Number(
+              item.price || 0
+            );
+
+
+      var available =
+        (
+          override.available ===
+          false
+        )
+          ? false
+          : true;
+
+
+      rows +=
+
+        '<div class="mm-item">' +
+
+        '<input type="checkbox" ' +
+        'class="mm-check mm-item-check" ' +
+        'data-id="' +
+        escapeHtml(
+          item.id
+        ) +
+        '">' +
+
+        '<div class="mm-info">' +
+
+        '<div class="mm-name' +
+        (
+          available
+            ? ""
+            : " off"
+        ) +
+        '" id="mmn-' +
+        escapeHtml(
+          item.id
+        ) +
+        '">' +
+
+        escapeHtml(
+          item.name
+        ) +
+
+        '</div>' +
+
+        '</div>' +
+
+        '<div class="mm-price-wrap">' +
+
+        '<span>$</span>' +
+
+        '<input ' +
+        'class="mm-price-in" ' +
+        'type="number" ' +
+        'step="0.50" ' +
+        'min="0" ' +
+        'id="mmp-' +
+        escapeHtml(
+          item.id
+        ) +
+        '" value="' +
+        Number(
+          price || 0
+        ).toFixed(2) +
+        '" onchange="updateItemPrice(' +
+        jsString(
+          item.id
+        ) +
+        ')">' +
+
+        '</div>' +
+
+        '<label class="mm-toggle-wrap">' +
+
+        '<input type="checkbox" ' +
+        'id="mma-' +
+        escapeHtml(
+          item.id
+        ) +
+        '"' +
+        (
+          available
+            ? " checked"
+            : ""
+        ) +
+        ' onchange="toggleMenuItem(' +
+        jsString(
+          item.id
+        ) +
+        ')">' +
+
+        '<span class="mm-slider"></span>' +
+
+        '</label>' +
+
+        '</div>';
+
+    }
+
+
+    html +=
+
+      '<div class="mm-section">' +
+
+      '<div class="mm-sec-hd" onclick="toggleMenuSection(this)">' +
+
+      '<h4>' +
+      escapeHtml(
+        category.label
+      ) +
+      '</h4>' +
+
+      '<span>tap to collapse</span>' +
+
+      '</div>' +
+
+      '<div class="mm-sec-body">' +
+      rows +
+      '</div>' +
+
+      '</div>';
+
+  }
+
+
+  el.innerHTML =
+    html;
+
+}
+
+
+/* ================================================================
+   COLLAPSE MENU CATEGORY
+   ================================================================ */
+
+function toggleMenuSection(header){
+
+  var body =
+    header.nextElementSibling;
+
+
+  if(!body){
+    return;
+  }
+
+
+  body.style.display =
+    (
+      body.style.display ===
+      "none"
+    )
+      ? "block"
+      : "none";
+
+}
+
+window.toggleMenuSection =
+  toggleMenuSection;
+
+
+/* ================================================================
+   ENABLE / DISABLE ONE ITEM
+   ================================================================ */
+
+function toggleMenuItem(id){
+
+  var checkbox =
+    document.getElementById(
+      "mma-" + id
+    );
+
+
+  var nameEl =
+    document.getElementById(
+      "mmn-" + id
+    );
+
+
+  var priceEl =
+    document.getElementById(
+      "mmp-" + id
+    );
+
+
+  if(!checkbox){
+    return;
+  }
+
+
+  var available =
+    checkbox.checked;
+
+
+  if(nameEl){
+
+    nameEl.className =
+      "mm-name" +
+      (
+        available
+          ? ""
+          : " off"
+      );
+
+  }
+
+
+  var overrides =
+    getOverrides();
+
+
+  overrides[id] = {
+
+    price:
+      priceEl
+        ? (
+            parseFloat(
+              priceEl.value
+            ) ||
+            0
+          )
+        : 0,
+
+    available:
+      available
+
+  };
+
+
+  setOverrides(
+    overrides
+  );
+
+
+  menuBuilt =
+    false;
+
+
+  buildFeatured();
+
+
+  toast(
+    available
+      ? "Item enabled on menu."
+      : "Item hidden from menu."
+  );
+
+}
+
+window.toggleMenuItem =
+  toggleMenuItem;
+
+
+/* ================================================================
+   UPDATE ITEM PRICE
+   ================================================================ */
+
+function updateItemPrice(id){
+
+  var priceEl =
+    document.getElementById(
+      "mmp-" + id
+    );
+
+
+  var checkbox =
+    document.getElementById(
+      "mma-" + id
+    );
+
+
+  if(!priceEl){
+    return;
+  }
+
+
+  var overrides =
+    getOverrides();
+
+
+  var available =
+    checkbox
+      ? checkbox.checked
+      : true;
+
+
+  overrides[id] = {
+
+    price:
+      parseFloat(
+        priceEl.value
+      ) ||
+      0,
+
+    available:
+      available
+
+  };
+
+
+  setOverrides(
+    overrides
+  );
+
+
+  menuBuilt =
+    false;
+
+
+  buildFeatured();
+
+
+  toast(
+    "Price updated."
+  );
+
+}
+
+window.updateItemPrice =
+  updateItemPrice;
+
+
+/* ================================================================
+   GET SELECTED MENU ITEMS
+   ================================================================ */
+
+function getSelectedMenuItemIds(){
+
+  var boxes =
+    document.querySelectorAll(
+      ".mm-item-check:checked"
+    );
+
+
+  var ids =
+    [];
+
+
+  for(
+    var i = 0;
+    i < boxes.length;
+    i++
+  ){
+
+    ids.push(
+      boxes[i].dataset.id
+    );
+
+  }
+
+
+  return ids;
+
+}
+
+
+/* ================================================================
+   SELECT / DESELECT ALL MENU ITEMS
+   ================================================================ */
+
+function toggleSelectAllItems(
+  checked
+){
+
+  var boxes =
+    document.querySelectorAll(
+      ".mm-item-check"
+    );
+
+
+  for(
+    var i = 0;
+    i < boxes.length;
+    i++
+  ){
+
+    boxes[i].checked =
+      checked;
+
+  }
+
+}
+
+window.toggleSelectAllItems =
+  toggleSelectAllItems;
+
+
+/* ================================================================
+   BULK ENABLE ITEMS
+   ================================================================ */
+
+function bulkEnableItems(){
+
+  var ids =
+    getSelectedMenuItemIds();
+
+
+  if(
+    !ids.length
+  ){
+
+    toast(
+      "No items selected."
+    );
+
+    return;
+
+  }
+
+
+  var overrides =
+    getOverrides();
+
+
+  ids.forEach(
+    function(id){
+
+      var priceEl =
+        document.getElementById(
+          "mmp-" + id
+        );
+
+
+      overrides[id] = {
+
+        price:
+          priceEl
+            ? (
+                parseFloat(
+                  priceEl.value
+                ) ||
+                0
+              )
+            : 0,
+
+        available:
+          true
+
+      };
+
+
+      var nameEl =
+        document.getElementById(
+          "mmn-" + id
+        );
+
+
+      var checkbox =
+        document.getElementById(
+          "mma-" + id
+        );
+
+
+      if(nameEl){
+
+        nameEl.className =
+          "mm-name";
+
+      }
+
+
+      if(checkbox){
+
+        checkbox.checked =
+          true;
+
+      }
+
+    }
+  );
+
+
+  setOverrides(
+    overrides
+  );
+
+
+  menuBuilt =
+    false;
+
+
+  buildFeatured();
+
+
+  toast(
+    ids.length +
+    " item(s) enabled."
+  );
+
+}
+
+window.bulkEnableItems =
+  bulkEnableItems;
+
+
+/* ================================================================
+   BULK DISABLE ITEMS
+   ================================================================ */
+
+function bulkDisableItems(){
+
+  var ids =
+    getSelectedMenuItemIds();
+
+
+  if(
+    !ids.length
+  ){
+
+    toast(
+      "No items selected."
+    );
+
+    return;
+
+  }
+
+
+  var overrides =
+    getOverrides();
+
+
+  ids.forEach(
+    function(id){
+
+      var priceEl =
+        document.getElementById(
+          "mmp-" + id
+        );
+
+
+      overrides[id] = {
+
+        price:
+          priceEl
+            ? (
+                parseFloat(
+                  priceEl.value
+                ) ||
+                0
+              )
+            : 0,
+
+        available:
+          false
+
+      };
+
+
+      var nameEl =
+        document.getElementById(
+          "mmn-" + id
+        );
+
+
+      var checkbox =
+        document.getElementById(
+          "mma-" + id
+        );
+
+
+      if(nameEl){
+
+        nameEl.className =
+          "mm-name off";
+
+      }
+
+
+      if(checkbox){
+
+        checkbox.checked =
+          false;
+
+      }
+
+    }
+  );
+
+
+  setOverrides(
+    overrides
+  );
+
+
+  menuBuilt =
+    false;
+
+
+  buildFeatured();
+
+
+  toast(
+    ids.length +
+    " item(s) disabled."
+  );
+
+}
+
+window.bulkDisableItems =
+  bulkDisableItems;  
+   /* ================================================================
+   ADMIN ORDER FORMATTING
+   ================================================================ */
+
+function orderItemsText(order){
+
+  if(
+    !order ||
+    !Array.isArray(order.items) ||
+    !order.items.length
+  ){
+
+    return "No item details.";
+
+  }
+
+
+  return order.items
+    .map(
+      function(item){
+
+        var qty =
+          Number(
+            item.quantity ||
+            item.qty ||
+            1
+          );
+
+
+        return (
+          qty +
+          "× " +
+          String(
+            item.name ||
+            "Item"
+          )
+        );
+
+      }
+    )
+    .join(" · ");
+
+}
+
+
+/* ================================================================
+   PAYMENT STATUS BADGE
+   ================================================================ */
+
+function paymentBadgeHtml(order){
+
+  var paymentStatus =
+    String(
+      order.paymentStatus ||
+      "unpaid"
+    )
+    .toLowerCase();
+
+
+  var cls =
+    "unpaid";
+
+
+  var label =
+    "UNPAID";
+
+
+  if(
+    paymentStatus === "paid" ||
+    paymentStatus === "completed"
+  ){
+
+    cls =
+      "paid";
+
+    label =
+      "✅ PAID";
+
+
+  } else if(
+    paymentStatus === "pending"
+  ){
+
+    cls =
+      "pending";
+
+    label =
+      "⏳ PENDING";
+
+
+  } else if(
+    paymentStatus === "failed"
+  ){
+
+    cls =
+      "failed";
+
+    label =
+      "⚠️ FAILED";
+
+
+  } else if(
+    paymentStatus === "canceled" ||
+    paymentStatus === "cancelled"
+  ){
+
+    cls =
+      "canceled";
+
+    label =
+      "CANCELED";
+
+  }
+
+
+  return (
+    '<div class="payment-line">' +
+    '<span class="pay-badge ' +
+    cls +
+    '">' +
+    label +
+    '</span>' +
+    '</div>'
+  );
+
+}
+
+
+/* ================================================================
+   FULFILLMENT DISPLAY
+   ================================================================ */
+
+function fulfillmentHtml(order){
+
+  var kind =
+    String(
+      order.fulfillment ||
+      CLIENT.fulfillment.defaultFulfillment ||
+      "pickup"
+    )
+    .toLowerCase();
+
+
+  var location =
+    kind === "delivery"
+
+      ? (
+          order.deliveryAddress ||
+          "Address not provided"
+        )
+
+      : (
+          order.pickupLocation ||
+          CLIENT.fulfillment.pickupLocation ||
+          "Pickup location TBD"
+        );
+
+
+  var icon =
+    kind === "delivery"
+      ? "🚚"
+      : "🏠";
+
+
+  return (
+
+    '<span class="ocard-fulfill">' +
+    icon +
+    ' ' +
+    escapeHtml(kind) +
+    '</span>' +
+
+    '<p style="font-size:.76rem;color:var(--gray);margin:0 0 .5rem">' +
+    escapeHtml(location) +
+    '</p>'
+
+  );
+
+}
+
+
+/* ================================================================
+   RENDER ADMIN ORDERS
+   ================================================================ */
+
+function renderAdminOrders(orders){
+
+  var list =
+    document.getElementById(
+      "adminOrders"
+    );
+
+
+  if(!list){
+    return;
+  }
+
+
+  if(
+    !orders.length
+  ){
+
+    list.innerHTML =
+
+      '<div class="no-orders">' +
+      'No ' +
+      escapeHtml(
+        CLIENT.shortName
+      ) +
+      ' orders have been saved yet.' +
+      '</div>';
+
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    orders
+      .slice(
+        0,
+        150
+      )
+      .map(
+        function(order){
+
+          var when =
+            order.createdAt
+              ? new Date(
+                  order.createdAt
+                )
+                .toLocaleString()
+              : "";
+
+
+          var id =
+            String(
+              order.id ||
+              ""
+            );
+
+
+          return (
+
+            '<div class="ocard">' +
+
+            '<div class="ocard-top">' +
+
+            '<div class="ocard-check-row">' +
+
+            '<input type="checkbox" ' +
+            'class="mm-check ord-check" ' +
+            'data-id="' +
+            escapeHtml(id) +
+            '">' +
+
+            '<div>' +
+
+            '<div class="ocard-id">' +
+            'Order ' +
+            escapeHtml(id) +
+            '</div>' +
+
+            '<div class="ocard-time">' +
+            escapeHtml(when) +
+            '</div>' +
+
+            '</div>' +
+
+            '</div>' +
+
+            '<div class="ocard-total">' +
+            '$' +
+            Number(
+              order.total ||
+              0
+            )
+            .toFixed(2) +
+            '</div>' +
+
+            '</div>' +
+
+
+            '<div class="ocard-cust">' +
+
+            '<h4>' +
+            escapeHtml(
+              order.customerName ||
+              "Customer"
+            ) +
+            '</h4>' +
+
+            '<p>📞 ' +
+
+            (
+              order.phone
+
+                ? '<a href="tel:' +
+                  escapeHtml(
+                    order.phone
+                  ) +
+                  '">' +
+                  escapeHtml(
+                    order.phone
+                  ) +
+                  '</a>'
+
+                : '—'
+            ) +
+
+            (
+              order.email
+                ? " · " +
+                  escapeHtml(
+                    order.email
+                  )
+                : ""
+            ) +
+
+            '</p>' +
+
+            '</div>' +
+
+
+            fulfillmentHtml(
+              order
+            ) +
+
+
+            '<div class="ocard-items">' +
+            escapeHtml(
+              orderItemsText(
+                order
+              )
+            ) +
+            '</div>' +
+
+
+            (
+              order.notes
+
+                ? '<div class="ocard-items">📝 ' +
+                  escapeHtml(
+                    order.notes
+                  ) +
+                  '</div>'
+
+                : ''
+            ) +
+
+
+            paymentBadgeHtml(
+              order
+            ) +
+
+
+            '<button class="order-delete-btn" ' +
+            'onclick="deleteAdminOrder(' +
+            jsString(id) +
+            ', this)">' +
+            '🗑 Delete Order' +
+            '</button>' +
+
+            '</div>'
+
+          );
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* ================================================================
+   SELECT ADMIN ORDERS
+   ================================================================ */
+
+function getSelectedOrderIds(){
+
+  var boxes =
+    document.querySelectorAll(
+      ".ord-check:checked"
+    );
+
+
+  var ids =
+    [];
+
+
+  for(
+    var i = 0;
+    i < boxes.length;
+    i++
+  ){
+
+    ids.push(
+      boxes[i].dataset.id
+    );
+
+  }
+
+
+  return ids;
+
+}
+
+
+function toggleSelectAllOrders(
+  checked
+){
+
+  var boxes =
+    document.querySelectorAll(
+      ".ord-check"
+    );
+
+
+  for(
+    var i = 0;
+    i < boxes.length;
+    i++
+  ){
+
+    boxes[i].checked =
+      checked;
+
+  }
+
+}
+
+window.toggleSelectAllOrders =
+  toggleSelectAllOrders;
+
+
+/* ================================================================
+   BULK DELETE ORDERS
+   ================================================================ */
+
+async function bulkDeleteOrders(){
+
+  var ids =
+    getSelectedOrderIds();
+
+
+  if(
+    !ids.length
+  ){
+
+    toast(
+      "No orders selected."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      "Delete " +
+      ids.length +
+      " order(s)? This cannot be undone."
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    var response =
+      await fetch(
+        BACKEND_URL +
+        "/orders",
+        {
+
+          method:
+            "DELETE",
+
+          headers:
+            {
+
+              "Accept":
+                "application/json",
+
+              "Content-Type":
+                "application/json",
+
+              "X-Admin-Key":
+                adminKey
+
+            },
+
+          cache:
+            "no-store",
+
+          body:
+            JSON.stringify(
+              {
+                ids:
+                  ids
+              }
+            )
+
+        }
+      );
+
+
+    var data =
+      await response.json();
+
+
+    if(
+      response.status ===
+      401
+    ){
+
+      adminKey =
+        "";
+
+
+      sessionStorage.removeItem(
+        ADMIN_STORAGE_KEY
+      );
+
+
+      openAdminLogin();
+
+
+      throw new Error(
+        "Admin session expired. Please enter the password again."
+      );
+
+    }
+
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Unable to delete orders."
+      );
+
+    }
+
+
+    toast(
+      ids.length +
+      " order(s) deleted."
+    );
+
+
+    var selectAll =
+      document.getElementById(
+        "ordSelectAll"
+      );
+
+
+    if(selectAll){
+
+      selectAll.checked =
+        false;
+
+    }
+
+
+    await loadAdminOrders();
+
+
+  } catch(error){
+
+    toast(
+      error &&
+      error.message
+
+        ? error.message
+
+        : "Unable to delete orders."
+    );
+
+  }
+
+}
+
+window.bulkDeleteOrders =
+  bulkDeleteOrders;
+
+
+/* ================================================================
+   LOAD ADMIN ORDERS
+   ================================================================ */
+
+async function loadAdminOrders(){
+
+  var list =
+    document.getElementById(
+      "adminOrders"
+    );
+
+
+  if(!list){
+    return;
+  }
+
+
+  list.innerHTML =
+
+    '<div class="no-orders">' +
+    'Loading ' +
+    escapeHtml(
+      CLIENT.shortName
+    ) +
+    ' orders...' +
+    '</div>';
+
+
+  try{
+
+    var response =
+      await fetch(
+        BACKEND_URL +
+        "/orders",
+        {
+
+          method:
+            "GET",
+
+          headers:
+            {
+
+              "Accept":
+                "application/json",
+
+              "X-Admin-Key":
+                adminKey
+
+            },
+
+          cache:
+            "no-store"
+
+        }
+      );
+
+
+    var data =
+      await response.json();
+
+
+    if(
+      response.status ===
+      401
+    ){
+
+      adminKey =
+        "";
+
+
+      sessionStorage.removeItem(
+        ADMIN_STORAGE_KEY
+      );
+
+
+      openAdminLogin();
+
+
+      throw new Error(
+        "Admin session expired. Please enter the password again."
+      );
+
+    }
+
+
+    if(
+      !response.ok ||
+      !data.ok ||
+      !Array.isArray(
+        data.orders
+      )
+    ){
+
+      throw new Error(
+        data.error ||
+        "Orders could not be loaded."
+      );
+
+    }
+
+
+    var orders =
+      data.orders;
+
+
+    adminOrdersCache =
+      orders;
+
+
+    var paid =
+      orders.filter(
+        function(order){
+
+          var status =
+            String(
+              order.paymentStatus ||
+              ""
+            )
+            .toLowerCase();
+
+
+          return (
+            status === "paid" ||
+            status === "completed"
+          );
+
+        }
+      );
+
+
+    var pending =
+      orders.filter(
+        function(order){
+
+          return (
+            String(
+              order.paymentStatus ||
+              ""
+            )
+            .toLowerCase() ===
+            "pending"
+          );
+
+        }
+      );
+
+
+    var revenue =
+      paid.reduce(
+        function(
+          total,
+          order
+        ){
+
+          return (
+            total +
+            Number(
+              order.total ||
+              0
+            )
+          );
+
+        },
+        0
+      );
+
+
+    var totalEl =
+      document.getElementById(
+        "st-total"
+      );
+
+
+    var paidEl =
+      document.getElementById(
+        "st-paid"
+      );
+
+
+    var pendingEl =
+      document.getElementById(
+        "st-pending"
+      );
+
+
+    var revenueEl =
+      document.getElementById(
+        "st-rev"
+      );
+
+
+    if(totalEl){
+
+      totalEl.textContent =
+        orders.length;
+
+    }
+
+
+    if(paidEl){
+
+      paidEl.textContent =
+        paid.length;
+
+    }
+
+
+    if(pendingEl){
+
+      pendingEl.textContent =
+        pending.length;
+
+    }
+
+
+    if(revenueEl){
+
+      revenueEl.textContent =
+        "$" +
+        revenue.toFixed(2);
+
+    }
+
+
+    renderAdminOrders(
+      orders
+    );
+
+
+  } catch(error){
+
+    list.innerHTML =
+
+      '<div class="no-orders">' +
+      'Unable to load orders: ' +
+      escapeHtml(
+        error &&
+        error.message
+          ? error.message
+          : "Unknown error"
+      ) +
+      '</div>';
+
+  }
+
+}
+
+window.loadAdminOrders =
+  loadAdminOrders;
+
+
+/* ================================================================
+   DELETE ONE ORDER
+   ================================================================ */
+
+async function deleteAdminOrder(
+  orderId,
+  button
+){
+
+  if(!orderId){
+    return;
+  }
+
+
+  var order =
+    adminOrdersCache.find(
+      function(item){
+
+        return (
+          item.id ===
+          orderId
+        );
+
+      }
+    );
+
+
+  var customer =
+    order &&
+    order.customerName
+
+      ? order.customerName
+
+      : "this customer";
+
+
+  var total =
+    order
+
+      ? "$" +
+        Number(
+          order.total ||
+          0
+        )
+        .toFixed(2)
+
+      : "";
+
+
+  var confirmed =
+    window.confirm(
+
+      "Delete order " +
+      orderId +
+      " for " +
+      customer +
+
+      (
+        total
+          ? " (" +
+            total +
+            ")"
+          : ""
+      ) +
+
+      "?\n\nThis permanently removes the order from the admin order list."
+
+    );
+
+
+  if(!confirmed){
+    return;
+  }
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "Deleting...";
+
+  }
+
+
+  try{
+
+    var response =
+      await fetch(
+
+        BACKEND_URL +
+        "/orders/" +
+        encodeURIComponent(
+          orderId
+        ),
+
+        {
+
+          method:
+            "DELETE",
+
+          headers:
+            {
+
+              "Accept":
+                "application/json",
+
+              "X-Admin-Key":
+                adminKey
+
+            },
+
+          cache:
+            "no-store"
+
+        }
+      );
+
+
+    var data =
+      await response.json();
+
+
+    if(
+      response.status ===
+      401
+    ){
+
+      adminKey =
+        "";
+
+
+      sessionStorage.removeItem(
+        ADMIN_STORAGE_KEY
+      );
+
+
+      openAdminLogin();
+
+
+      throw new Error(
+        "Admin session expired. Please enter the password again."
+      );
+
+    }
+
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Order could not be deleted."
+      );
+
+    }
+
+
+    toast(
+      "Order deleted."
+    );
+
+
+    await loadAdminOrders();
+
+
+  } catch(error){
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "🗑 Delete Order";
+
+    }
+
+
+    alert(
+      error &&
+      error.message
+
+        ? error.message
+
+        : "Unable to delete order."
+    );
+
+  }
+
+}
+
+window.deleteAdminOrder =
+  deleteAdminOrder;
+
+
+/* ================================================================
+   EXPORT ORDERS CSV
+   ================================================================ */
+
+function exportOrdersCSV(){
+
+  if(
+    !adminOrdersCache.length
+  ){
+
+    toast(
+      "No orders to export."
+    );
+
+    return;
+
+  }
+
+
+  var header = [
+
+    "Order",
+    "Date",
+    "Customer",
+    "Phone",
+    "Email",
+    "Fulfillment",
+    "Location",
+    "Items",
+    "Subtotal",
+    "Delivery Fee",
+    "Total",
+    "Payment Status",
+    "Status",
+    "Notes"
+
+  ];
+
+
+  var rows =
+    [
+      header
+    ];
+
+
+  adminOrdersCache
+    .forEach(
+      function(order){
+
+        var location =
+          String(
+            order.fulfillment ||
+            ""
+          )
+          .toLowerCase() ===
+          "delivery"
+
+            ? (
+                order.deliveryAddress ||
+                ""
+              )
+
+            : (
+                order.pickupLocation ||
+                ""
+              );
+
+
+        rows.push(
+          [
+
+            order.id || "",
+
+            order.createdAt || "",
+
+            order.customerName || "",
+
+            order.phone || "",
+
+            order.email || "",
+
+            order.fulfillment || "",
+
+            location,
+
+            orderItemsText(
+              order
+            ),
+
+            "$" +
+            Number(
+              order.subtotal ||
+              0
+            )
+            .toFixed(2),
+
+            "$" +
+            Number(
+              order.deliveryFee ||
+              0
+            )
+            .toFixed(2),
+
+            "$" +
+            Number(
+              order.total ||
+              0
+            )
+            .toFixed(2),
+
+            order.paymentStatus || "",
+
+            order.status || "",
+
+            order.notes || ""
+
+          ]
+        );
+
+      }
+    );
+
+
+  var csv =
+    rows
+      .map(
+        function(row){
+
+          return row
+            .map(
+              function(value){
+
+                return (
+                  '"' +
+                  String(value)
+                    .replace(
+                      /"/g,
+                      '""'
+                    ) +
+                  '"'
+                );
+
+              }
+            )
+            .join(",");
+
+        }
+      )
+      .join("\n");
+
+
+  var blob =
+    new Blob(
+      [
+        csv
+      ],
+      {
+        type:
+          "text/csv"
+      }
+    );
+
+
+  var url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+  var link =
+    document.createElement(
+      "a"
+    );
+
+
+  link.href =
+    url;
+
+
+  var date =
+    new Date();
+
+
+  link.download =
+
+    (
+      CLIENT.key ||
+      "orders"
+    ) +
+
+    "_" +
+
+    (
+      date.getMonth() +
+      1
+    ) +
+
+    "-" +
+
+    date.getDate() +
+
+    "-" +
+
+    date.getFullYear() +
+
+    ".csv";
+
+
+  document.body
+    .appendChild(
+      link
+    );
+
+
+  link.click();
+
+
+  document.body
+    .removeChild(
+      link
+    );
+
+
+  URL.revokeObjectURL(
+    url
+  );
+
+
+  toast(
+    "Exported! Check your downloads."
+  );
+
+}
+
+window.exportOrdersCSV =
+  exportOrdersCSV;
+   /* ================================================================
+   CHECKOUT SUMMARY
+   ================================================================ */
+
+function buildSummary(){
+
+  if(
+    !cart.length
+  ){
+
+    go(
+      "menu"
+    );
+
+    return;
+
+  }
+
+
+  var itemHtml =
+    "";
+
+
+  for(
+    var i = 0;
+    i < cart.length;
+    i++
+  ){
+
+    itemHtml +=
+
+      '<div class="sum-row">' +
+
+      '<span>' +
+      cart[i].qty +
+      'x ' +
+      escapeHtml(
+        cart[i].name
+      ) +
+      '</span>' +
+
+      '<span class="sum-price">$' +
+      (
+        cart[i].price *
+        cart[i].qty
+      ).toFixed(2) +
+      '</span>' +
+
+      '</div>';
+
+  }
+
+
+  document
+    .getElementById(
+      "sumItems"
+    )
+    .innerHTML =
+      itemHtml;
+
+
+  var subtotal =
+    cartTotal();
+
+
+  document
+    .getElementById(
+      "sumTots"
+    )
+    .innerHTML =
+
+      '<div class="stot-row big">' +
+
+      '<span>Total</span>' +
+
+      '<span>$' +
+      subtotal.toFixed(2) +
+      '</span>' +
+
+      '</div>';
+
+}
+
+
+/* ================================================================
+   PLACE ORDER + OPEN SQUARE CHECKOUT
+   ================================================================ */
+
+async function placeOrder(){
+
+  var firstName =
+    document
+      .getElementById(
+        "co-fn"
+      )
+      .value
+      .trim();
+
+
+  var lastName =
+    document
+      .getElementById(
+        "co-ln"
+      )
+      .value
+      .trim();
+
+
+  var phone =
+    document
+      .getElementById(
+        "co-ph"
+      )
+      .value
+      .trim();
+
+
+  var email =
+    document
+      .getElementById(
+        "co-em"
+      )
+      .value
+      .trim();
+
+
+  var notes =
+    document
+      .getElementById(
+        "co-nt"
+      )
+      .value
+      .trim();
+
+
+  var btn =
+    document.getElementById(
+      "placeBtn"
+    );
+
+
+  var status =
+    document.getElementById(
+      "coStatus"
+    );
+
+
+  if(
+    !firstName ||
+    !lastName
+  ){
+
+    toast(
+      "Please enter your first and last name."
+    );
+
+    return;
+
+  }
+
+
+  if(!phone){
+
+    toast(
+      "Please enter your phone number."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !cart.length
+  ){
+
+    toast(
+      "Your cart is empty."
+    );
+
+    go(
+      "menu"
+    );
+
+    return;
+
+  }
+
+
+  var total =
+    cartTotal();
+
+
+  if(
+    total <= 0
+  ){
+
+    toast(
+      "Custom-priced items must be quoted before online checkout."
+    );
+
+    return;
+
+  }
+
+
+  var payload = {
+
+    customerName:
+      firstName +
+      " " +
+      lastName,
+
+    phone:
+      phone,
+
+    email:
+      email,
+
+    items:
+      cart.map(
+        function(item){
+
+          return {
+
+            id:
+              item.id,
+
+            name:
+              item.name,
+
+            quantity:
+              item.qty,
+
+            price:
+              Number(
+                item.price
+              )
+
+          };
+
+        }
+      ),
+
+    subtotal:
+      Number(
+        total.toFixed(2)
+      ),
+
+    deliveryFee:
+      Number(
+        CLIENT.fulfillment
+          .defaultDeliveryFee ||
+        0
+      ),
+
+    total:
+      Number(
+        (
+          total +
+          Number(
+            CLIENT.fulfillment
+              .defaultDeliveryFee ||
+            0
+          )
+        )
+        .toFixed(2)
+      ),
+
+    fulfillment:
+      CLIENT.fulfillment
+        .defaultFulfillment ||
+      "pickup",
+
+    pickupLocation:
+      CLIENT.fulfillment
+        .pickupLocation ||
+      "",
+
+    deliveryAddress:
+      "",
+
+    notes:
+      notes
+
+  };
+
+
+  var originalBtnText =
+    btn.textContent;
+
+
+  btn.disabled =
+    true;
+
+
+  btn.textContent =
+    "Creating your secure checkout...";
+
+
+  status.textContent =
+    "Please wait — do not close this page.";
+
+
+  try {
+
+    /* ---- SAVE ORDER FIRST ---- */
+
+    var orderResponse =
+      await fetch(
+
+        BACKEND_URL +
+        "/orders",
+
+        {
+
+          method:
+            "POST",
+
+          headers:
+            {
+
+              "Content-Type":
+                "application/json",
+
+              "Accept":
+                "application/json"
+
+            },
+
+          body:
+            JSON.stringify(
+              payload
+            )
+
+        }
+      );
+
+
+    var orderData =
+      await orderResponse.json();
+
+
+    if(
+      !orderResponse.ok ||
+      !orderData.ok ||
+      !orderData.order ||
+      !orderData.order.id
+    ){
+
+      throw new Error(
+
+        orderData.error ||
+        "Unable to create your order."
+
+      );
+
+    }
+
+
+    /* ---- CREATE SQUARE PAYMENT LINK ---- */
+
+    var paymentResponse =
+      await fetch(
+
+        BACKEND_URL +
+        "/create-payment-link",
+
+        {
+
+          method:
+            "POST",
+
+          headers:
+            {
+
+              "Content-Type":
+                "application/json",
+
+              "Accept":
+                "application/json"
+
+            },
+
+          body:
+            JSON.stringify(
+              {
+
+                orderId:
+                  orderData.order.id
+
+              }
+            )
+
+        }
+      );
+
+
+    var paymentData =
+      await paymentResponse.json();
+
+
+    if(
+      !paymentResponse.ok ||
+      !paymentData.ok ||
+      !paymentData.paymentUrl
+    ){
+
+      throw new Error(
+
+        paymentData.error ||
+        "Unable to open Square checkout."
+
+      );
+
+    }
+
+
+    status.textContent =
+      "Opening Square secure checkout...";
+
+
+    window.location.href =
+      paymentData.paymentUrl;
+
+
+  } catch(error) {
+
+    console.error(
+      CLIENT.shortName +
+      " checkout error:",
+      error
+    );
+
+
+    btn.disabled =
+      false;
+
+
+    btn.textContent =
+      originalBtnText;
+
+
+    status.textContent =
+      "Checkout could not be started. Please try again.";
+
+
+    toast(
+
+      error &&
+      error.message
+
+        ? error.message
+
+        : "Checkout could not be started."
+
+    );
+
+  }
+
+}
+
+window.placeOrder =
+  placeOrder;
+
+
+/* ================================================================
+   TOAST MESSAGE
+   ================================================================ */
+
+function toast(msg){
+
+  var el =
+    document.getElementById(
+      "toast"
+    );
+
+
+  if(!el){
+    return;
+  }
+
+
+  el.textContent =
+    msg;
+
+
+  el.classList.add(
+    "on"
+  );
+
+
+  if(toastTimer){
+
+    clearTimeout(
+      toastTimer
+    );
+
+  }
+
+
+  toastTimer =
+    setTimeout(
+      function(){
+
+        el.classList.remove(
+          "on"
+        );
+
+      },
+      2200
+    );
+
+}
+
+
+/* ================================================================
+   HERO SPARK EFFECT
+   ================================================================ */
+
+function startSparks(){
+
+  var field =
+    document.getElementById(
+      "sparks"
+    );
+
+
+  if(!field){
+    return;
+  }
+
+
+  var colors = [
+
+    CLIENT.colors.accent ||
+    "#C9A227",
+
+    CLIENT.colors.accent2 ||
+    "#E8C766",
+
+    CLIENT.colors.highlight ||
+    "#EC5FA8"
+
+  ];
+
+
+  for(
+    var i = 0;
+    i < 18;
+    i++
+  ){
+
+    var particle =
+      document.createElement(
+        "div"
+      );
+
+
+    particle.className =
+      "spark";
+
+
+    var size =
+      2 +
+      Math.random() *
+      5;
+
+
+    var duration =
+      5 +
+      Math.random() *
+      7;
+
+
+    var drift =
+      (
+        Math.random() -
+        .5
+      ) *
+      150;
+
+
+    particle.style.cssText =
+
+      "left:" +
+      (
+        Math.random() *
+        100
+      ) +
+      "%;" +
+
+      "bottom:0;" +
+
+      "width:" +
+      size +
+      "px;" +
+
+      "height:" +
+      size +
+      "px;" +
+
+      "--sx:" +
+      drift +
+      "px;" +
+
+      "background:" +
+      colors[
+        Math.floor(
+          Math.random() *
+          colors.length
+        )
+      ] +
+      ";" +
+
+      "animation-duration:" +
+      duration +
+      "s;" +
+
+      "animation-delay:" +
+      (
+        -Math.random() *
+        duration
+      ) +
+      "s;";
+
+
+    field.appendChild(
+      particle
+    );
+
+  }
+
+}
+
+
+/* ================================================================
+   START MASTER APPLICATION
+   ================================================================ */
+
+init();
+
+})();
+</script>
+</body>
+</html>
+   
